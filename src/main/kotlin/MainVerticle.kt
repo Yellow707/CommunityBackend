@@ -4,6 +4,8 @@ import io.vertx.core.AsyncResult
 import io.vertx.core.Vertx
 import io.vertx.core.http.HttpServer
 import io.vertx.core.http.HttpServerRequest
+import java.nio.Buffer
+import java.util.*
 
 fun main(args: Array<String>) {
     val vertx = Vertx.vertx()
@@ -17,8 +19,12 @@ class MainVerticle : AbstractVerticle() {
 
         val server = vertx.createHttpServer()
         server.webSocketHandler { handler ->
-            print(handler.path())
-        }.listen(8080)
+            handler.writeTextMessage("Connected")
 
+            handler.handler{ msg ->
+                handler.writeTextMessage("Response from server")
+
+            }
+        }.listen(8080)
     }
 }
