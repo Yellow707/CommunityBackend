@@ -4,12 +4,6 @@ import com.google.gson.Gson
 import com.ipetrov.community.model.UserModel
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
-import io.vertx.core.Vertx
-
-fun main(args: Array<String>) {
-    val vertx = Vertx.vertx()
-    vertx.deployVerticle(MainVerticle())
-}
 
 class MainVerticle : AbstractVerticle() {
 
