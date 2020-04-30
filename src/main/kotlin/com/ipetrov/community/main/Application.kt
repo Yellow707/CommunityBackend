@@ -1,12 +1,16 @@
 package com.ipetrov.community.main
 
-import com.ipetrov.community.api.MainVerticle
+import com.ipetrov.community.api.ApiVerticle
 import io.vertx.core.Vertx
+import org.koin.core.context.startKoin
 
 object Application {
     @JvmStatic
     fun main(args: Array<String>) {
-        val vertx = Vertx.vertx()
-        vertx.deployVerticle(MainVerticle())
+        startKoin {
+            modules(listOf(dataModule, handlerModule))
+        }
+
+        Vertx.vertx().deployVerticle(ApiVerticle())
     }
 }
