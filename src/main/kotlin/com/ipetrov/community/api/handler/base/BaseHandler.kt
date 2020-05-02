@@ -7,9 +7,8 @@ import io.netty.handler.codec.http.HttpHeaderNames
 import io.netty.handler.codec.http.HttpHeaderValues
 import io.vertx.core.Handler
 import io.vertx.ext.web.RoutingContext
-import org.koin.core.KoinComponent
 
-abstract class BaseHandler(protected val gson: Gson) : Handler<RoutingContext>, KoinComponent {
+abstract class BaseHandler(protected val gson: Gson) : Handler<RoutingContext>{
 
     protected fun RoutingContext.endResponse(responseBody: BaseResponse, code: Int = 200) {
         val response = request().response()

@@ -2,14 +2,14 @@ package com.ipetrov.community.api.handler.auth
 
 import com.google.gson.Gson
 import com.ipetrov.community.api.handler.base.BodyHandler
-import com.ipetrov.community.api.model.RegistrationModel
+import com.ipetrov.community.api.model.AuthModel
 import com.ipetrov.community.api.response.BaseResponse
 import com.ipetrov.community.exceptions.ServerException
 import io.vertx.ext.web.RoutingContext
 
-abstract class AbstractAuthHandler(gson: Gson) : BodyHandler<RegistrationModel>(RegistrationModel::class.java, gson) {
+abstract class AbstractAuthHandler(gson: Gson) : BodyHandler<AuthModel>(AuthModel::class.java, gson) {
 
-    override fun onSuccess(event: RoutingContext, requestBody: RegistrationModel) {
+    override fun onSuccess(event: RoutingContext, requestBody: AuthModel) {
         try {
             if (validateAuthRequest(requestBody, event)) return
             onAuthRequestValid(requestBody, event)
@@ -18,7 +18,7 @@ abstract class AbstractAuthHandler(gson: Gson) : BodyHandler<RegistrationModel>(
         }
     }
 
-    private fun validateAuthRequest(requestBody: RegistrationModel, event: RoutingContext): Boolean {
+    private fun validateAuthRequest(requestBody: AuthModel, event: RoutingContext): Boolean {
         if (requestBody.login.length < 6) {
             event.endResponse(BaseResponse(BaseResponse.Status.ERROR, ServerException.LoginLengthException()), 400)
             return true
@@ -31,5 +31,5 @@ abstract class AbstractAuthHandler(gson: Gson) : BodyHandler<RegistrationModel>(
         return false
     }
 
-    protected abstract fun onAuthRequestValid(requestBody: RegistrationModel, event: RoutingContext)
+    protected abstract fun onAuthRequestValid(requestBody: AuthModel, event: RoutingContext)
 }
