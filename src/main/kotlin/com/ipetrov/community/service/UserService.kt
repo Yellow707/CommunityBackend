@@ -11,7 +11,6 @@ class UserService(userDao: IUserDao): IUserService {
     }
 
     override fun registerUser(user: AuthModel) {
-        TODO("Not yet implemented")
+        userDao.addUser(user)
     }
-
 }

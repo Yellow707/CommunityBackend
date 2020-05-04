@@ -12,7 +12,7 @@ class RegistrationHandler(gson: Gson, userService: IUserService): AbstractAuthHa
 
     override fun onAuthRequestValid(requestBody: AuthModel, event: RoutingContext) {
         //TODO: Add user to database
-        print("Registration handler")
+        println("Registration handler")
 
         userService.registerUser(requestBody)
         event.endResponse(BaseResponse(AuthModel("Yellow707", "successPassword")))

@@ -12,7 +12,7 @@ object DatabaseConst {
     const val LOGIN = "login"
     const val EMAIL = "email"
     const val IMAGE = "image"
-    const val PASSWORD_HASH = "password_hash"
+    const val PASSWORD = "password"
 
 
 }

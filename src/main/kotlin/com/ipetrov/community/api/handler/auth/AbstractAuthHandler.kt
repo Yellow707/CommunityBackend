@@ -24,7 +24,7 @@ abstract class AbstractAuthHandler(gson: Gson) : BodyHandler<AuthModel>(AuthMode
             return true
         }
 
-        if (requestBody.passwordHash.length < 6) {
+        if (requestBody.password.length < 6) {
             event.endResponse(BaseResponse(BaseResponse.Status.ERROR, ServerException.PasswordLengthException()), 400)
             return true
         }
