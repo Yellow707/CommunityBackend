@@ -1,6 +1,6 @@
 package com.ipetrov.community.model
 
-data class WorkflowModel(
+data class WorkspaceModel(
     val id: Int,
     val name:String,
     val description: String?,
