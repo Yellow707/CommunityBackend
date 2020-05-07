@@ -7,7 +7,7 @@ interface IUserDao {
 
     var database: Database
 
-    fun addUser(user: AuthModel)
+    fun addUser(user: AuthModel, handler: (id: Int) -> Unit)
     fun getUser()
     fun updateUser()
     fun removeUser()

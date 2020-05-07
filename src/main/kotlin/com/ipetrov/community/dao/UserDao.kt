@@ -8,11 +8,12 @@ import io.vertx.sqlclient.Tuple
 class UserDao(database: Database): IUserDao {
     override var database = database
 
-    override fun addUser(user: AuthModel) {
-        val sql = "INSERT INTO users (login, password) VALUES ($1, $2)"
+    override fun addUser(user: AuthModel, handler: (id: Int) -> Unit) {
+        val sql = "INSERT INTO users (login, password) VALUES ($1, $2) RETURNING ID"
         database.client.preparedQuery(sql)
             .execute(Tuple.of(user.login, user.password)) { result ->
-                print(result)
+               println("Inserted ID: ${result.result().toList().first().getInteger("id")}")
+                handler(result.result().toList().first().getInteger("id"))
             }
     }
 

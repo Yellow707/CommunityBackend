@@ -2,6 +2,7 @@ package com.ipetrov.community.api
 
 import com.google.gson.Gson
 import com.ipetrov.community.api.handler.auth.RegistrationHandler
+import com.ipetrov.community.dao.AccessTokenDao
 import com.ipetrov.community.dao.UserDao
 import com.ipetrov.community.database.Database
 import com.ipetrov.community.service.UserService
@@ -17,7 +18,8 @@ class MainVerticle : AbstractVerticle() {
         val database = Database(vertx)
         val gson = Gson()
         val userDao = UserDao(database)
-        val userService = UserService(userDao)
+        val accessTokenDao = AccessTokenDao(database)
+        val userService = UserService(userDao, accessTokenDao)
 
         val router = Router.router(vertx)
         router.post("/registration").handler(RegistrationHandler(gson, userService))

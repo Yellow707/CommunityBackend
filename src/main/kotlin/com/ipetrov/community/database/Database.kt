@@ -26,7 +26,7 @@ class Database(vertx: Vertx) {
         createTablesIfNotExists()
     }
 
-    fun createTablesIfNotExists() {
+    private fun createTablesIfNotExists() {
         val workspacesQuery = "CREATE TABLE IF NOT EXISTS workspaces (" +
                     "${DatabaseConst.ID} SERIAL NOT NULL," +
                     "${DatabaseConst.TITLE} TEXT NOT NULL," +
@@ -44,10 +44,28 @@ class Database(vertx: Vertx) {
                 ")"
 
         val workspacesUsersQuery = "CREATE TABLE IF NOT EXISTS workspaces_users (" +
-                "${DatabaseConst.WORKSPACE_ID} INT NOT NULL," +
+                "${DatabaseConst.WORKSPACE_ID} SERIAL NOT NULL," +
                 "${DatabaseConst.USER_ID} INT NOT NULL," +
                 "PRIMARY KEY (${DatabaseConst.WORKSPACE_ID}, ${DatabaseConst.USER_ID})," +
                 "FOREIGN KEY (${DatabaseConst.WORKSPACE_ID}) REFERENCES workspaces(${DatabaseConst.ID}) ON DELETE CASCADE," +
+                "FOREIGN KEY (${DatabaseConst.USER_ID}) REFERENCES users(${DatabaseConst.ID}) ON DELETE CASCADE" +
+                ")"
+
+        val accessTokenQuery = "CREATE TABLE IF NOT EXISTS access_tokens (" +
+                "${DatabaseConst.ID} SERIAL NOT NULL, " +
+                "${DatabaseConst.USER_ID} INT NOT NULL, " +
+                "${DatabaseConst.TOKEN} TEXT NOT NULL, " +
+                "${DatabaseConst.EXPIRATION_TIME} INTEGER NOT NULL, " +
+                "PRIMARY KEY (${DatabaseConst.ID}), " +
+                "FOREIGN KEY (${DatabaseConst.USER_ID}) REFERENCES users(${DatabaseConst.ID}) ON DELETE CASCADE" +
+                ")"
+
+        val refreshTokenQuery = "CREATE TABLE IF NOT EXISTS refresh_tokens (" +
+                "${DatabaseConst.ID} SERIAL NOT NULL, " +
+                "${DatabaseConst.USER_ID} INT NOT NULL, " +
+                "${DatabaseConst.TOKEN} TEXT NOT NULL, " +
+                "${DatabaseConst.EXPIRATION_TIME} INTEGER NOT NULL, " +
+                "PRIMARY KEY (${DatabaseConst.ID}), " +
                 "FOREIGN KEY (${DatabaseConst.USER_ID}) REFERENCES users(${DatabaseConst.ID}) ON DELETE CASCADE" +
                 ")"
 
@@ -57,7 +75,15 @@ class Database(vertx: Vertx) {
                     if (usersResult.succeeded()) {
                         client.query(workspacesUsersQuery).execute { workspacesUsersResult ->
                             if (workspacesUsersResult.succeeded()) {
-                                println("Database tables created")
+                                client.query(accessTokenQuery).execute { accessTokensResult ->
+                                    if (accessTokensResult.succeeded()) {
+                                        client.query(refreshTokenQuery).execute { refreshTokensResult ->
+                                            if (refreshTokensResult.succeeded()) {
+                                                println("Database tables created")
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
