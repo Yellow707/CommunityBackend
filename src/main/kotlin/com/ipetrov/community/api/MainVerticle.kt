@@ -1,6 +1,7 @@
 package com.ipetrov.community.api
 
 import com.google.gson.Gson
+import com.ipetrov.community.api.handler.auth.AuthorizationHandler
 import com.ipetrov.community.api.handler.auth.RegistrationHandler
 import com.ipetrov.community.dao.AccessTokenDao
 import com.ipetrov.community.dao.UserDao
@@ -23,6 +24,7 @@ class MainVerticle : AbstractVerticle() {
 
         val router = Router.router(vertx)
         router.post("/registration").handler(RegistrationHandler(gson, userService))
+        router.post("/auth").handler(AuthorizationHandler(gson, userService))
 
         vertx.createHttpServer().requestHandler(router::handle).listen(8080)
         println("Server started")

@@ -5,19 +5,21 @@ import com.ipetrov.community.api.model.AuthModel
 import com.ipetrov.community.api.response.AuthorizationResponse
 import com.ipetrov.community.api.response.BaseResponse
 import com.ipetrov.community.service.IUserService
+import com.ipetrov.community.service.UserService
 import io.vertx.ext.web.RoutingContext
 
-class RegistrationHandler(gson: Gson, userService: IUserService): AbstractAuthHandler(gson) {
+class AuthorizationHandler(gson: Gson, userService: IUserService) : AbstractAuthHandler(gson) {
 
-    val userService = userService
+    var userService = userService
 
     override fun onAuthRequestValid(requestBody: AuthModel, event: RoutingContext) {
-        userService.registerUser(requestBody) { accessToken ->
+        userService.authUser(requestBody) { accessToken ->
             if (accessToken != null) {
                 event.endResponse(BaseResponse(AuthorizationResponse(accessToken)))
             } else {
-                event.endResponse(BaseResponse(BaseResponse.Status.ERROR, "Access token null"))
+                event.endResponse(BaseResponse(BaseResponse.Status.ERROR, "Wrong login or password"))
             }
+
         }
     }
 }

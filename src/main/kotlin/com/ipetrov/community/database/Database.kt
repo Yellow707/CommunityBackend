@@ -37,7 +37,7 @@ class Database(vertx: Vertx) {
 
         val usersQuery = "CREATE TABLE IF NOT EXISTS users (" +
                 "${DatabaseConst.ID} SERIAL NOT NULL," +
-                "${DatabaseConst.LOGIN} TEXT NOT NULL," +
+                "${DatabaseConst.LOGIN} TEXT UNIQUE NOT NULL," +
                 "${DatabaseConst.IMAGE} BYTEA," +
                 "${DatabaseConst.PASSWORD} TEXT NOT NULL," +
                 "PRIMARY KEY (${DatabaseConst.ID})" +

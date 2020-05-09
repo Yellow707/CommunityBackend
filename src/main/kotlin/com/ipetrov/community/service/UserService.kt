@@ -4,14 +4,25 @@ import com.ipetrov.community.api.model.AuthModel
 import com.ipetrov.community.dao.IAccessTokenDao
 import com.ipetrov.community.dao.IUserDao
 import com.ipetrov.community.helpers.TokenGenerator
-import com.sun.org.apache.xpath.internal.operations.Bool
 
 class UserService(userDao: IUserDao, accessTokenDao: IAccessTokenDao): IUserService {
     override val userDao = userDao
     override val accessTokenDao = accessTokenDao
 
-    override fun authUser(user: AuthModel) {
-        TODO("Not yet implemented")
+    override fun authUser(authData: AuthModel, complete: (token: String?) -> Unit) {
+        userDao.getUser(authData) { user ->
+            if (user.password == authData.password) {
+                accessTokenDao.getToken(user.id) { accessToken ->
+                    if (accessToken != null) {
+                        complete(accessToken)
+                    } else {
+                        complete(null)
+                    }
+                }
+            } else {
+                complete(null)
+            }
+        }
     }
 
     override fun registerUser(user: AuthModel, complete: (token: String?) -> Unit) {
